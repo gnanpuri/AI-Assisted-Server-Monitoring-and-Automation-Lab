@@ -1,0 +1,13 @@
+chunk,severity,summary,suggested_check,reviewed_by_human
+1,MEDIUM,"AppArmor is denying the 'who' command from reading /etc/passwd and /etc/nsswitch.conf, causing repeated audit log entries.",sudo aa-complain /usr/bin/who,NO
+2,MEDIUM,Could not parse output,Review manually,NO
+3,MEDIUM,"A user installed python3-venv via sudo, triggering PackageKit and resulting in multiple AppArmor denial logs for the 'who' profile attempting to read /etc/passwd and /etc/nsswitch.conf. The cron job ran normally afterward.",sudo aa-status,NO
+4,MEDIUM,"AppArmor denied the 'who' command from reading /etc/nsswitch.conf and /etc/passwd, indicating a profile restriction that may affect user lookup functionality. CRON jobs are running normally.",sudo aa-complain /etc/apparmor.d/usr.sbin.who,NO
+5,MEDIUM,"User gnansai executed a sudo apt install and cron jobs ran normally, but apparmor repeatedly denied the 'who' profile from reading /etc/passwd and /etc/nsswitch.conf, indicating a restrictive profile for the 'who' command.",sudo aa-status | grep who,NO
+6,MEDIUM,"AppArmor denied the 'who' command from reading /etc/passwd and /etc/nsswitch.conf, indicating a policy restriction or misconfiguration. No immediate compromise detected but it may affect user lookup functionality.",sudo aa-status,NO
+7,MEDIUM,"AppArmor denied the 'who' command from reading /etc/nsswitch.conf and /etc/passwd repeatedly, indicating a restrictive profile for that binary.",sudo aa-logprof /etc/apparmor.d/usr.sbin.who,NO
+8,MEDIUM,"AppArmor is denying the 'who' command from reading /etc/passwd and /etc/nsswitch.conf, indicating a mis‑configured profile for that binary.",sudo aa-complain /etc/apparmor.d/usr.sbin.who,NO
+9,MEDIUM,"AppArmor is repeatedly denying the 'who' command from reading /etc/passwd and /etc/nsswitch.conf, likely due to a restrictive profile; this occurs during normal cron activity by user gnansai.",sudo aa-complain /etc/apparmor.d/usr.sbin.who,NO
+10,MEDIUM,"Cron jobs run as user gnansai successfully append the date to cron_test.log, while AppArmor repeatedly denies the ""who"" profile from reading /etc/passwd and /etc/nsswitch.conf.",sudo aa-status | grep who,NO
+11,MEDIUM,"AppArmor denied the 'who' command from reading /etc/nsswitch.conf and /etc/passwd, indicating a restrictive profile. CRON jobs for user gnansai ran normally.",sudo aa-status,NO
+12,HIGH,Multiple failed SSH login attempts for invalid user admin from IP 203.0.113.45 and MySQL service was killed due to out‑of‑memory at 06:08:34.,dmesg | grep -i oom,NO
